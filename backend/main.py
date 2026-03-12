@@ -2,14 +2,17 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel 
 from app.database import SessionLocal, engine 
 from app.models.models import Base, Team 
-from app.routers import teams, drivers
+from app.routers import teams, drivers,circuits, seasons,races
 
 
 Base.metadata.create_all(bind=engine)
 
-app= FastAPI()
-app.include_router(teams.router, prefix="/teams", tags=["Teams"])
-app.include_router(drivers.router, prefix="/drivers", tags=["Drivers"])
+app= FastAPI(redirect_slashes=False)
+app.include_router(teams.router,    prefix="/teams",    tags=["Teams"])
+app.include_router(drivers.router,  prefix="/drivers",  tags=["Drivers"])
+app.include_router(circuits.router, prefix="/circuits", tags=["Circuits"])
+app.include_router(seasons.router,  prefix="/seasons",  tags=["Seasons"])
+app.include_router(races.router, prefix = "/races", tags=["Races"])
 class TeamInput(BaseModel):
     name:str
     nationality:str
